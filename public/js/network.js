@@ -1,22 +1,33 @@
 // Config Socket.io server
 let SOCKET_SERVER = null;
 
-if (
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-) {
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
   // Local development
-  SOCKET_SERVER = "https://block-blast-bvb.vercel.app/";
+  SOCKET_SERVER = "http://localhost:3000";
 } else if (window.location.hostname.includes("vercel.app")) {
   // Production on Vercel - connect to same domain
   SOCKET_SERVER = `https://${window.location.hostname}`;
 }
 // Else: GitHub Pages or other hosts - SOCKET_SERVER remains null (multiplayer disabled)
 
-window.socket = SOCKET_SERVER
-  ? io(SOCKET_SERVER, { reconnection: true })
-  : null;
+console.log("🌐 Socket Server Config:", SOCKET_SERVER || "DISABLED");
+
+window.socket = SOCKET_SERVER ? io(SOCKET_SERVER, { reconnection: true }) : null;
 window.isMultiplayer = false;
+
+if (window.socket) {
+  window.socket.on("connect", () => {
+    console.log("✅ Socket.io connected:", window.socket.id);
+  });
+
+  window.socket.on("disconnect", () => {
+    console.log("❌ Socket.io disconnected");
+  });
+
+  window.socket.on("connect_error", (error) => {
+    console.error("⚠️ Socket.io error:", error);
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("single-btn").addEventListener("click", () => {

@@ -21,13 +21,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function addScoreToLeaderboard(playerName, score) {
     if (window.socket) {
+      console.log("📤 Gửi điểm lên leaderboard:", playerName, score);
       window.socket.emit("add_score", { playerName, score });
+    } else {
+      console.warn("⚠️ Socket không kết nối - không thể gửi điểm");
     }
   }
 
   function requestLeaderboard() {
     if (window.socket) {
+      console.log("📥 Yêu cầu leaderboard từ server");
       window.socket.emit("get_leaderboard");
+    } else {
+      console.warn("⚠️ Socket không kết nối - không thể lấy leaderboard");
+    }
+  }
     }
   }
 
@@ -103,18 +111,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (window.socket) {
+    console.log("✅ Socket.io connected - leaderboard ready");
+
     window.socket.on("leaderboard_data", (data) => {
+      console.log("📊 Nhận leaderboard data:", data);
       currentLeaderboard = data;
       renderLeaderboard();
     });
 
     window.socket.on("leaderboard_updated", (data) => {
+      console.log("🔄 Leaderboard updated:", data);
       currentLeaderboard = data;
       if (leaderboardScreen.style.display === "flex") {
         renderLeaderboard();
       }
     });
   } else {
+    console.error("❌ Socket.io NOT connected - leaderboard disabled");
     leaderboardBtn.disabled = true;
     leaderboardBtn.title = "Leaderboard chỉ hoạt động khi có kết nối server";
   }

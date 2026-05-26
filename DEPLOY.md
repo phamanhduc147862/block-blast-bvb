@@ -1,70 +1,152 @@
-# Deploy Block Blast BVB lên GitHub Pages
+# Deploy Block Blast BVB
 
-## 🚀 Hướng dẫn Deploy
+## 🚀 Tùy chọn Deploy
 
-### Bước 1: Đổi tên branch sang `main`
+### ✅ Option 1: GitHub Pages + Vercel (Khuyến nghị)
+- **Frontend**: GitHub Pages (https://phamanhduc147862.github.io/block-blast-bvb/)
+- **Backend**: Vercel (https://your-app.vercel.app)
+- **Kết quả**: ✅ Multiplayer + ✅ Global Leaderboard
+
+### ✅ Option 2: Vercel Full Stack
+- **Frontend + Backend**: Vercel (cùng 1 domain)
+- **Kết quả**: ✅ Multiplayer + ✅ Global Leaderboard
+
+### ❌ Option 3: GitHub Pages Only
+- **Frontend**: GitHub Pages
+- **Kết quả**: ✅ Single Player Only (Multiplayer disabled)
+
+---
+
+## 📦 Deploy lên Vercel (Full Stack - Recommended)
+
+### Bước 1: Push code lên GitHub
+```bash
+# Đổi tên branch
+git branch -m master main
+git push -u origin main
+```
+
+### Bước 2: Tạo Vercel Account
+1. Vào https://vercel.com
+2. Click **Sign Up** → chọn **GitHub**
+3. Authorize Vercel
+
+### Bước 3: Import Project
+1. Dashboard Vercel → **Add New** → **Project**
+2. Chọn repo `block-blast-bvb`
+3. Click **Import**
+
+### Bước 4: Configure Project
+Ở trang **Configure Project**:
+
+| Trường | Giá trị |
+|-------|--------|
+| **Framework Preset** | Node.js |
+| **Root Directory** | `.` |
+| **Build Command** | `npm install` |
+| **Start Command** | `node server.js` |
+| **Output Directory** | `public` |
+
+### Bước 5: Deploy
+Click **Deploy** → Đợi ✅ (khoảng 1-2 phút)
+
+### Bước 6: Lấy URL
+Sau deploy xong, Vercel sẽ show URL:
+```
+https://block-blast-bvb-phamanhduc147862.vercel.app
+```
+
+✅ Multiplayer + Leaderboard sẽ tự động hoạt động!
+
+---
+
+## 📦 Deploy lên GitHub Pages (Single Player Only)
+
+### Bước 1: Cấu hình GitHub Pages
+1. Settings → **Pages**
+2. Source: `gh-pages` branch
+3. Folder: `/ (root)`
+
+### Bước 2: Push code
 ```bash
 git branch -m master main
 git push -u origin main
 ```
 
-### Bước 2: Cấu hình GitHub Pages
-1. Vào **Settings** → **Pages**
-2. Chọn **Source**: Deploy from a branch
-3. Chọn branch: **gh-pages**
-4. Chọn folder: **/ (root)**
+Workflow sẽ tự động deploy tới:
+```
+https://phamanhduc147862.github.io/block-blast-bvb/
+```
 
-### Bước 3: Tự động Deploy
-Mỗi khi bạn push lên branch `main`:
+⚠️ **Lưu ý**: Multiplayer & Global Leaderboard sẽ disable
+
+---
+
+## 🌐 Deploy lên GitHub Pages + Vercel Backend (Advanced)
+
+### Bước 1: Deploy Backend trên Vercel
+(Làm theo hướng dẫn Vercel Full Stack ở trên)
+
+### Bước 2: Lấy Vercel URL
+```
+https://your-vercel-app.vercel.app
+```
+
+### Bước 3: Sửa network.js để kết nối backend
+Sửa `public/js/network.js` dòng 2-10:
+
+```javascript
+// Config Socket.io server
+let SOCKET_SERVER = null;
+
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  // Local development
+  SOCKET_SERVER = 'http://localhost:3000';
+} else if (window.location.hostname.includes('github.io')) {
+  // GitHub Pages - connect to Vercel backend
+  SOCKET_SERVER = 'https://your-vercel-app.vercel.app';
+} else if (window.location.hostname.includes('vercel.app')) {
+  // Production on Vercel - connect to same domain
+  SOCKET_SERVER = `https://${window.location.hostname}`;
+}
+
+window.socket = SOCKET_SERVER ? io(SOCKET_SERVER, { reconnection: true }) : null;
+window.isMultiplayer = false;
+```
+
+### Bước 4: Deploy Frontend GitHub Pages
 ```bash
 git push origin main
 ```
 
-Workflow sẽ tự động:
-1. Build dự án
-2. Deploy lên branch `gh-pages`
-3. Hiển thị tại: `https://phamanhduc147862.github.io/block-blast-bvb/`
+✅ Multiplayer + Global Leaderboard sẽ hoạt động!
 
 ---
 
-## ⚠️ Lưu ý Quan Trọng
+## 🐛 Troubleshooting
 
-### Tính năng khả dụng
-✅ **Chơi Đơn** (Single Player)  
-✅ **Bảng Xếp Hạng cục bộ**  
-✅ **Lưu tên người chơi**
+### Multiplayer không hoạt động?
+- Kiểm tra Console (F12) xem có error gì
+- Chắc chắn Vercel URL đúng trong `network.js`
+- Chắc chắn Vercel app đang chạy (check Vercel Dashboard)
 
-### Tính năng không khả dụng
-❌ **Chơi Multiplayer** (Vì GitHub Pages không có server Node.js)  
-❌ **Leaderboard Global** (Cần server để lưu dữ liệu)
+### Leaderboard không save?
+- Leaderboard chỉ lưu khi có server
+- Nếu dùng GitHub Pages, leaderboard sẽ lưu cục bộ (localStorage)
+- Nếu dùng Vercel, leaderboard sẽ global (server memory)
 
----
-
-## 🔧 Để enable Multiplayer & Leaderboard Global
-
-Bạn cần deploy server riêng trên:
-- **Vercel** (miễn phí, recommend)
-- **Railway** (miễn phí)
-- **Render** (miễn phí)
-
-### Setup với Vercel:
-1. Push code lên GitHub
-2. Vào https://vercel.com → Import project
-3. Vercel sẽ auto detect `vercel.json`
-4. Deploy (sẽ có cả frontend + backend)
-5. Sửa `network.js` line 2-6 để point tới Vercel URL:
-
-```javascript
-const SOCKET_SERVER = 'https://your-vercel-app.vercel.app';
-window.socket = io(SOCKET_SERVER, { reconnection: true });
-```
+### Socket.io không connect?
+- Kiểm tra CORS policy trên server
+- Vercel mặc định đã cho phép CORS
 
 ---
 
 ## 📝 File thay đổi
-- `.github/workflows/deploy.yml` - Workflow tự động deploy
-- `public/js/network.js` - Config socket server
+- `.github/workflows/deploy.yml` - Workflow tự động deploy GitHub Pages
+- `public/js/network.js` - Config socket server auto-detect
 - `public/js/auth.js` - Xử lý leaderboard
-- `vercel.json` - Config để deploy lên Vercel
+- `vercel.json` - Config Vercel
+- `server.js` - Backend server
 
 **Happy gaming!** 🎮
+

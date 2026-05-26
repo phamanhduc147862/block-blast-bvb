@@ -1,9 +1,14 @@
 // Config Socket.io server
-const SOCKET_SERVER = window.location.hostname === 'localhost'
-  ? 'http://localhost:3000'
-  : (window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:3000'
-      : null);
+let SOCKET_SERVER = null;
+
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  // Local development
+  SOCKET_SERVER = 'http://localhost:3000';
+} else if (window.location.hostname.includes('vercel.app')) {
+  // Production on Vercel - connect to same domain
+  SOCKET_SERVER = `https://${window.location.hostname}`;
+}
+// Else: GitHub Pages or other hosts - SOCKET_SERVER remains null (multiplayer disabled)
 
 window.socket = SOCKET_SERVER ? io(SOCKET_SERVER, { reconnection: true }) : null;
 window.isMultiplayer = false;

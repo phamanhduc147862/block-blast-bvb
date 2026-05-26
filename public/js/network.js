@@ -8,8 +8,8 @@ if (
   // Local development
   SOCKET_SERVER = "http://localhost:3000";
 } else if (window.location.hostname.includes("vercel.app")) {
-  // Connect to Railway backend server
-  SOCKET_SERVER = "https://block-blast-server-prod.up.railway.app";
+  // Production on Vercel - connect to same domain
+  SOCKET_SERVER = `https://${window.location.hostname}`;
 }
 // Else: GitHub Pages or other hosts - SOCKET_SERVER remains null (multiplayer disabled)
 

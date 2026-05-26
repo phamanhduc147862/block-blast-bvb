@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Block Blast Multiplayer</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div id="menu-screen">
+      <h1 class="menu-title">BLOCK BLAST</h1>
+      <button id="single-btn" class="menu-btn style-single">
+        Chơi Đơn (Offline)
+      </button>
+      <div class="menu-divider"></div>
+      <button id="create-room-btn" class="menu-btn style-multi">
+        Tạo Phòng Thi Đấu
+      </button>
+      <div id="room-info-box" style="display: none">
+        <p>Mã phòng của bạn là:</p>
+        <h2 id="generated-room-id">0000</h2>
+        <div class="loader"></div>
+        <p class="blink">Đang chờ đối thủ nhập mã...</p>
+      </div>
+      <div class="menu-divider"></div>
+      <div class="join-box">
+        <input
+          type="number"
+          id="room-input"
+          placeholder="Nhập mã phòng 4 số..."
+          pattern="\d*"
+        />
+        <button id="join-room-btn" class="menu-btn style-join">
+          Vào Phòng
+        </button>
+      </div>
+    </div>
+
+    <div id="game-screen" style="display: none">
+      <div id="top-bar">
+        <div class="score-board">
+          <span id="single-best" style="display: none; color: #ffb703"
+            >Kỷ lục: <strong id="high-score">0</strong></span
+          >
+          <span id="opp-label" style="display: none; color: #e84545"
+            >Đối thủ: <strong id="opp-score">0</strong></span
+          >
+          <span style="color: #00adb5"
+            >Bạn: <strong id="my-score">0</strong></span
+          >
+        </div>
+      </div>
+      <div id="player-zone">
+        <div id="grid-board"></div>
+      </div>
+      <div id="spawn-area"></div>
+    </div>
+
+    <div id="game-over-screen" style="display: none">
+      <h1 id="game-over-text"></h1>
+      <button id="rematch-btn">Chơi Lại Ván Mới</button>
+      <button
+        id="back-to-menu-btn"
+        style="margin-top: 10px; background-color: #e84545"
+      >
+        Về Menu Chính
+      </button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/network.js"></script>
+    <script src="/js/game.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/input.js"></script>
+  </body>
+</html>

@@ -13,26 +13,10 @@ if (
 }
 // Else: GitHub Pages or other hosts - SOCKET_SERVER remains null (multiplayer disabled)
 
-console.log("🌐 Socket Server Config:", SOCKET_SERVER || "DISABLED");
-
 window.socket = SOCKET_SERVER
   ? io(SOCKET_SERVER, { reconnection: true })
   : null;
 window.isMultiplayer = false;
-
-if (window.socket) {
-  window.socket.on("connect", () => {
-    console.log("✅ Socket.io connected:", window.socket.id);
-  });
-
-  window.socket.on("disconnect", () => {
-    console.log("❌ Socket.io disconnected");
-  });
-
-  window.socket.on("connect_error", (error) => {
-    console.error("⚠️ Socket.io error:", error);
-  });
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("single-btn").addEventListener("click", () => {

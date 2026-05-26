@@ -36,8 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("⚠️ Socket không kết nối - không thể lấy leaderboard");
     }
   }
-    }
-  }
 
   function renderLeaderboard() {
     const leaderboardList = document.getElementById("leaderboard-list");

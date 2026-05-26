@@ -9,7 +9,7 @@ if (
   SOCKET_SERVER = "http://localhost:3000";
 } else if (window.location.hostname.includes("vercel.app")) {
   // Production on Vercel - connect to same domain
-  SOCKET_SERVER = `https://${window.location.hostname}`;
+  SOCKET_SERVER = `https://block-blast-bvb.onrender.com`;
 }
 // Else: GitHub Pages or other hosts - SOCKET_SERVER remains null (multiplayer disabled)
 

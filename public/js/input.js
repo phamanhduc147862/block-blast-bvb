@@ -98,6 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
               localStorage.setItem("blockBlastBestScore", bestScore);
             }
 
+            if (window.addScoreToLeaderboard && window.getStoredPlayerName) {
+              const playerName = window.getStoredPlayerName();
+              window.addScoreToLeaderboard(playerName, currentScore);
+            }
+
             const gameOverScreen = document.getElementById("game-over-screen");
             const gameOverText = document.getElementById("game-over-text");
             document.getElementById("rematch-btn").style.display =

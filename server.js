@@ -5,6 +5,8 @@ const io = require("socket.io")(http);
 
 app.use(express.static("public"));
 
+const globalLeaderboard = [];
+
 io.on("connection", (socket) => {
   console.log("🟢 Khách kết nối:", socket.id);
   socket.isStuck = false;
@@ -99,6 +101,20 @@ io.on("connection", (socket) => {
         }
       }
     }
+  });
+
+  socket.on("add_score", (data) => {
+    const { playerName, score } = data;
+    globalLeaderboard.push({ name: playerName, score: score });
+    globalLeaderboard.sort((a, b) => b.score - a.score);
+    if (globalLeaderboard.length > 10) {
+      globalLeaderboard.pop();
+    }
+    io.emit("leaderboard_updated", globalLeaderboard);
+  });
+
+  socket.on("get_leaderboard", () => {
+    socket.emit("leaderboard_data", globalLeaderboard);
   });
 
   socket.on("disconnect", () => {

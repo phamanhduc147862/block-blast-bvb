@@ -10,22 +10,48 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <div id="menu-screen">
+    <div id="login-screen">
       <h1 class="menu-title">BLOCK BLAST</h1>
+      <p style="margin-bottom: 20px; font-size: 1.1rem">
+        Nhập tên của bạn để bắt đầu
+      </p>
+      <input
+        type="text"
+        id="player-name-input"
+        placeholder="Tên hiển thị..."
+        maxlength="15"
+      />
+      <button id="start-game-btn" class="menu-btn style-multi">Tiếp Tục</button>
+    </div>
+
+    <div id="menu-screen" style="display: none">
+      <h1 class="menu-title" style="margin-bottom: 10px">BLOCK BLAST</h1>
+      <p style="margin-bottom: 30px; font-size: 1.2rem">
+        Xin chào,
+        <span
+          id="display-player-name"
+          style="color: #ffb703; font-weight: bold"
+        ></span
+        >!
+      </p>
+
       <button id="single-btn" class="menu-btn style-single">
         Chơi Đơn (Offline)
       </button>
-      <div class="menu-divider"></div>
+      <div class="menu-divider"><span>HOẶC THI ĐẤU</span></div>
       <button id="create-room-btn" class="menu-btn style-multi">
         Tạo Phòng Thi Đấu
       </button>
+
       <div id="room-info-box" style="display: none">
         <p>Mã phòng của bạn là:</p>
         <h2 id="generated-room-id">0000</h2>
         <div class="loader"></div>
         <p class="blink">Đang chờ đối thủ nhập mã...</p>
       </div>
+
       <div class="menu-divider"></div>
+
       <div class="join-box">
         <input
           type="number"
@@ -35,6 +61,28 @@
         />
         <button id="join-room-btn" class="menu-btn style-join">
           Vào Phòng
+        </button>
+      </div>
+
+      <button
+        id="leaderboard-btn"
+        class="menu-btn style-single"
+        style="margin-top: 20px; background-color: #8338ec"
+      >
+        🏆 Bảng Xếp Hạng
+      </button>
+    </div>
+
+    <div id="leaderboard-screen" style="display: none">
+      <div class="leaderboard-box">
+        <h2>BẢNG VÀNG GLOBAL</h2>
+        <ul id="leaderboard-list"></ul>
+        <button
+          id="close-leaderboard-btn"
+          class="menu-btn style-single"
+          style="background-color: #e84545"
+        >
+          Đóng
         </button>
       </div>
     </div>
@@ -71,8 +119,9 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/network.js"></script>
     <script src="/js/game.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/network.js"></script>
     <script src="/js/ui.js"></script>
     <script src="/js/input.js"></script>
   </body>

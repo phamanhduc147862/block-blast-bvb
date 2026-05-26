@@ -1,9 +1,21 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
-app.use(express.static("public"));
+// Serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Serve index.html for SPA routing
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 const globalLeaderboard = [];
 
@@ -125,7 +137,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 http.listen(PORT, () =>
   console.log(`🚀 Server chạy tại http://localhost:${PORT}`),
 );
